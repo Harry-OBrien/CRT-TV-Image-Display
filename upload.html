@@ -53,23 +53,23 @@
           <img src="assets/img/crt-television-blue.png" class="img-fluid animated" alt="Two pastel blue CRT TVs">
         </div>
         <div class="col-lg-6 order-2 d-flex flex-column justify-content-center contact" id="contact">
-          <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+          <form enctype="multipart/form-data" role="form" class="php-email-form" id="fileUploadForm"">
             <h3 class="mb-5">Select an image to be displayed:</h1>
 
             <div class="form-group mt-3">
               <label for="input-image">
                 <!-- Image upload -->
               </label>
-              <input type="file" class="form-control-file" name="input-image" id="input-image" required>
+              <input type="file" class="form-control-file" name="fileToUpload" id="fileToUpload" required>
               <!-- <p class="help-block">
                 Example block-level help text here.
               </p> -->
             </div>
 
             <div class="my-3">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your image has been uploaded. You should see it soon!</div>
+              <div class="loading" id="loading-holder">Loading</div>
+              <div class="error-message" id="error-holder"></div>
+              <div class="sent-message" id="sent-holder">Your image has been uploaded. You should see showing on the TV soon!</div>
             </div>
             <div class="text-center"><button type="submit">Upload</button></div>
           </form>
@@ -80,15 +80,48 @@
   </section><!-- End Hero -->
 
   <!-- Vendor JS Files -->
-  <!-- <script src="assets/vendor/aos/aos.js"></script> -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- <script src="assets/vendor/glightbox/js/glightbox.min.js"></script> -->
-  <!-- <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script> -->
-  <!-- <script src="assets/vendor/swiper/swiper-bundle.min.js"></script> -->
-  <!-- <script src="assets/vendor/php-email-form/validate.js"></script> -->
 
-  <!-- Template Main JS File -->
-  <!-- <script src="assets/js/main.js"></script> -->
+  <script>
+    const form = document.getElementById('fileUploadForm');
+    var loadingBlock = document.getElementById("loading-holder");
+    var sentBlock = document.getElementById("sent-holder");
+    var errorBlock = document.getElementById("error-holder");
+
+
+    form.addEventListener('submit', function(event){
+
+      event.preventDefault();
+
+      const formattedFormData = new FormData(form);
+      postData(formattedFormData);
+
+      loadingBlock.style.display="block";
+      sentBlock.style.display="none";
+      errorBlock.style.display="none";
+    });
+
+    async function postData(formattedFormData){
+      const response = await fetch('forms/upload.php', {
+          method: 'POST',
+          body: formattedFormData
+      });
+      const data = await response.json();
+      console.log(data);
+
+      if(data.success) {
+        loadingBlock.style.display="none";
+        sentBlock.style.display="block";
+        errorBlock.style.display="none";
+      }
+      else {
+        loadingBlock.style.display="none";
+        sentBlock.style.display="none";
+        errorBlock.style.display="block";
+        errorBlock.innerHTML = data.reason;
+      }
+    }
+  </script>
 
 </body>
 
