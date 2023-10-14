@@ -386,6 +386,12 @@ h6,
   background: #eb5d1e;
 }
 
+@media (max-width: 991px) {
+  #hero {
+    text-align: center;
+  }
+}
+
 #hero .btn-get-started:hover {
   background: #ef7f4d;
 }
@@ -397,10 +403,6 @@ h6,
 @media (max-width: 991px) {
   #hero {
     height: calc(100vh - 72px);
-  }
-
-  #hero .animated {
-    animation: none;
   }
 
   #hero .hero-img {
@@ -434,7 +436,12 @@ h6,
   }
 }
 
-@media (max-height: 600px) {
+@media (max-height: 300px) {
+
+  #hero .animated {
+    animation: none;
+  }
+  
   #hero {
     height: 120vh;
   }
